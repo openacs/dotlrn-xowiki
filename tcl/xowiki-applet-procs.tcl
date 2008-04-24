@@ -269,12 +269,13 @@ xowiki_applet proc uninstall {} {
     } -default "0"]
     
     if {$ds_id == 0} {
-      error "No datasource id found for $name"
+      ns_log notice "No datasource id found for $name"
+    } else {
+      #
+      # drop the datasource
+      #
+      ::xo::db::sql::portal_datasource delete -datasource_id $ds_id
     }
-    #
-    # drop the datasource
-    #
-    ::xo::db::sql::portal_datasource delete -datasource_id $ds_id
     #
     #  drop the operation
     #
