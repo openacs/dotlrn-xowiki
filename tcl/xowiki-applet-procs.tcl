@@ -217,7 +217,7 @@ xowiki_applet ad_proc change_event_handler {
 xowiki_applet proc install {} {
   set name [my applet_key]
   db_transaction {
-
+    
     # register the applet implementation
     ::xo::db::sql::acs_sc_impl new \
         -impl_contract_name "dotlrn_applet" -impl_name $name \
@@ -260,22 +260,6 @@ xowiki_applet proc uninstall {} {
   set name [my applet_key]
 
   db_transaction {
-    # 
-    # get the datasource
-    #
-
-    set ds_id [db_string dbqd..get_ds_id {
-      select datasource_id from portal_datasources where name = :name
-    } -default "0"]
-    
-    if {$ds_id == 0} {
-      ns_log notice "No datasource id found for $name"
-    } else {
-      #
-      # drop the datasource
-      #
-      ::xo::db::sql::portal_datasource delete -datasource_id $ds_id
-    }
     #
     #  drop the operation
     #
