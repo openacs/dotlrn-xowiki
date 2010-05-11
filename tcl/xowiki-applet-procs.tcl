@@ -108,8 +108,6 @@ xowiki_applet ad_proc remove_applet_from_community {
   if { [site_node::exists_p -url $url] } {
     # get site node of mounted xowiki instance
     set node_id [site_node::get_node_id -url $url]
-    # unmount package
-    site_node::unmount -node_id $node_id
     # delete site node
     site_node::delete -node_id $node_id
   }
