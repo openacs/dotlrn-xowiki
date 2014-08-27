@@ -7,14 +7,15 @@
     <initial-install-p>f</initial-install-p>
     <singleton-p>t</singleton-p>
     
-    <version name="2.0" url="http://openacs.org/repository/download/apm/dotlrn-xowiki-2.0.apm">
+    <version name="2.1" url="http://openacs.org/repository/download/apm/dotlrn-xowiki-2.1.apm">
         <owner url="mailto:neumann@wu-wien.ac.at">Gustaf Neumann</owner>
         <owner url="http://www.km.co.at">Michael Totschnig</owner>
+	<summary>DotLRN Applet for XoWiki</summary> 
         <release-date>2008-02-27</release-date>
         <license>BSD-Style</license>
-        <maturity>0</maturity>
+        <maturity>1</maturity>
 
-        <provides url="dotlrn-xowiki" version="2.0"/>
+        <provides url="dotlrn-xowiki" version="2.1"/>
         <requires url="dotlrn" version="2.2.1"/>
         <requires url="xowiki-portlet" version="2.0"/>
 
