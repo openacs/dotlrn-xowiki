@@ -10,7 +10,7 @@
     <version name="2.1" url="http://openacs.org/repository/download/apm/dotlrn-xowiki-2.1.apm">
         <owner url="mailto:neumann@wu-wien.ac.at">Gustaf Neumann</owner>
         <owner url="http://www.km.co.at">Michael Totschnig</owner>
-	<summary>DotLRN Applet for XoWiki</summary> 
+	<summary>DotLRN Integration (Applet) for XoWiki</summary> 
         <vendor url="http://wu.ac.at">WU Vienna</vendor>
         <release-date>2008-02-27</release-date>
         <license>BSD-Style</license>
