@@ -279,6 +279,7 @@ xowiki_applet proc uninstall {} {
           -impl_contract_name "dotlrn_applet" -impl_name $name \
           -impl_operation_name $operation
     }
+
     #
     #  drop the binding
     #
@@ -290,6 +291,9 @@ xowiki_applet proc uninstall {} {
     #
     ::xo::db::sql::acs_sc_impl delete \
         -impl_contract_name "dotlrn_applet" -impl_name $name 
+
+    xo::dc dml delete_applet "delete from dotlrn_applets where applet_key = :name"
+
   }
   my log "--applet end of [self proc]"
 }
