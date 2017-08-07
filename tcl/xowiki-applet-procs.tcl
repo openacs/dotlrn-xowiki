@@ -125,7 +125,7 @@ xowiki_applet ad_proc remove_user {
   user_id
 } {
 } {
-  ad_return_complaint 1 "[my applet_key] remove_user not implimented!"
+  ad_return_complaint 1 "[my applet_key] remove_user not implemented!"
 }
 
 xowiki_applet ad_proc add_user_to_community {
