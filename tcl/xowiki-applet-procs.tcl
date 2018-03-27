@@ -67,7 +67,7 @@ xowiki_applet ad_proc remove_applet {
 xowiki_applet ad_proc add_applet_to_community {
   community_id
 } {
-  Add the xowiki applet to a specifc dotlrn community
+  Add the xowiki applet to a specific dotlrn community
 } {
   # get the community portal id
   set portal_id [dotlrn_community::get_portal_id -community_id $community_id]
@@ -132,7 +132,7 @@ xowiki_applet ad_proc add_user_to_community {
   community_id
   user_id
 } {
-  Add a user to a specifc dotlrn community
+  Add a user to a specific dotlrn community
 } {
   # nothing happens here
 }
