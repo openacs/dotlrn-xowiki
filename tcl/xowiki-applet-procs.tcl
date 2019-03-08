@@ -53,15 +53,15 @@ xowiki_applet ad_proc add_applet {
   One time init - must be repeatable!
 } {
   dotlrn_applet::add_applet_to_dotlrn \
-      -applet_key [my applet_key] \
-      -package_key [my my_package_key]
+      -applet_key [:applet_key] \
+      -package_key [:my_package_key]
 }
 
 xowiki_applet ad_proc remove_applet {
 } {
   One time destroy. 
 } {
-  ad_return_complaint 1 "[my applet_key] remove_applet not implemented!"
+  ad_return_complaint 1 "[:applet_key] remove_applet not implemented!"
 }
     
 xowiki_applet ad_proc add_applet_to_community {
@@ -73,10 +73,10 @@ xowiki_applet ad_proc add_applet_to_community {
   set portal_id [dotlrn_community::get_portal_id -community_id $community_id]
 
   # get applet id
-  set applet_id [dotlrn_applet::get_applet_id_from_key -applet_key [my applet_key]]
+  set applet_id [dotlrn_applet::get_applet_id_from_key -applet_key [:applet_key]]
   
   # create the package instance
-  set package_id [dotlrn::instantiate_and_mount $community_id [my package_key]]
+  set package_id [dotlrn::instantiate_and_mount $community_id [:package_key]]
 
   # set up the admin portlet
   set admin_portal_id [dotlrn_community::get_admin_portal_id -community_id $community_id]
@@ -99,11 +99,11 @@ xowiki_applet ad_proc remove_applet_from_community {
   # get package id
   set package_id [dotlrn_community::get_applet_package_id \
                       -community_id $community_id \
-                      -applet_key [my applet_key]]
+                      -applet_key [:applet_key]]
 
-  set applet_id [dotlrn_applet::get_applet_id_from_key -applet_key [my applet_key]]
+  set applet_id [dotlrn_applet::get_applet_id_from_key -applet_key [:applet_key]]
   dotlrn::unmount_package -package_id $package_id
-  set url "[dotlrn_community::get_community_url $community_id][my node_name]/"
+  set url "[dotlrn_community::get_community_url $community_id][:node_name]/"
   # delete site node
   if { [site_node::exists_p -url $url] } {
     # get site node of mounted xowiki instance
@@ -125,7 +125,7 @@ xowiki_applet ad_proc remove_user {
   user_id
 } {
 } {
-  ad_return_complaint 1 "[my applet_key] remove_user not implemented!"
+  ad_return_complaint 1 "[:applet_key] remove_user not implemented!"
 }
 
 xowiki_applet ad_proc add_user_to_community {
@@ -191,11 +191,11 @@ xowiki_applet ad_proc clone {
 } {
   Clone this applet's content from the old community to the new one
 } {
-  #ns_log notice "Cloning: [my applet_key]"
-  #set new_package_id [my add_applet_to_community $new_community_id]
+  #ns_log notice "Cloning: [:applet_key]"
+  #set new_package_id [:add_applet_to_community $new_community_id]
   #set old_package_id [dotlrn_community::get_applet_package_id \
   #                        -community_id $old_community_id \
-  #                        -applet_key [my applet_key] \
+  #                        -applet_key [:applet_key] \
   #                   ]
   #db_exec_plsql clone_data {}
   #return $new_package_id
@@ -213,7 +213,7 @@ xowiki_applet ad_proc change_event_handler {
 }   
 
 xowiki_applet proc install {} {
-  set name [my applet_key]
+  set name [:applet_key]
   db_transaction {
     
     # register the applet implementation
@@ -251,11 +251,11 @@ xowiki_applet proc install {} {
 }
 
 xowiki_applet proc uninstall {} {
-  my log "--applet calling [self proc]"
+  :log "--applet calling [self proc]"
   #
   # pretty similar "xowiki_portlet uninstall"
   #
-  set name [my applet_key]
+  set name [:applet_key]
 
   db_transaction {
     #
@@ -295,7 +295,7 @@ xowiki_applet proc uninstall {} {
     xo::dc dml delete_applet "delete from dotlrn_applets where applet_key = :name"
 
   }
-  my log "--applet end of [self proc]"
+  :log "--applet end of [self proc]"
 }
 
 ::xowiki_applet proc after-install {} {
