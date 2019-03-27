@@ -124,6 +124,7 @@ xowiki_applet ad_proc add_user {
 xowiki_applet ad_proc remove_user {
   user_id
 } {
+  Remove user
 } {
   ad_return_complaint 1 "[:applet_key] remove_user not implemented!"
 }
