@@ -126,7 +126,12 @@ xowiki_applet ad_proc remove_user {
 } {
   Remove user
 } {
-  ad_return_complaint 1 "[:applet_key] remove_user not implemented!"
+  # Just log the complaint instead of showing it to the user (script
+  # would keep going anyway, as it is not aborted). Needed for
+  # automated tests
+  ns_log warning "[:applet_key] remove_user not implemented!"
+  # ad_return_complaint 1 "[:applet_key] remove_user not implemented!"
+  return
 }
 
 xowiki_applet ad_proc add_user_to_community {
