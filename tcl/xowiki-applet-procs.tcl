@@ -19,11 +19,17 @@ ad_library {
 #
 
 Object xowiki_applet
-xowiki_applet proc applet_key {} {
+xowiki_applet ad_proc applet_key {
+} {
+  @return package key
+} {
   return "dotlrn_xowiki"
 }
 
-xowiki_applet proc my_package_key {} {
+xowiki_applet ad_proc my_package_key {
+} {
+  @return package key
+} {
   return "dotlrn-xowiki"
 }
 
@@ -36,14 +42,14 @@ xowiki_applet ad_proc package_key {
 
 xowiki_applet ad_proc node_name {
 } {
-  returns the node name
+  @return node name
 } {
   return "xowiki"
 }
 
 xowiki_applet ad_proc pretty_name {
 } {
-  returns the pretty name
+  @return pretty name
 } {
   return "XoWiki"
 }
