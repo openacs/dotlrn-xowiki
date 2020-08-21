@@ -119,7 +119,7 @@ xowiki_applet ad_proc remove_applet_from_community {
   }
 }
 
-xowiki_applet ad_proc add_user {
+xowiki_applet ad_proc -private add_user {
   user_id
 } {
   one time user-specific init
@@ -127,7 +127,7 @@ xowiki_applet ad_proc add_user {
   # noop
 }
 
-xowiki_applet ad_proc remove_user {
+xowiki_applet ad_proc -private remove_user {
   user_id
 } {
   Remove user
@@ -140,7 +140,7 @@ xowiki_applet ad_proc remove_user {
   return
 }
 
-xowiki_applet ad_proc add_user_to_community {
+xowiki_applet ad_proc -private add_user_to_community {
   community_id
   user_id
 } {
@@ -149,7 +149,7 @@ xowiki_applet ad_proc add_user_to_community {
   # nothing happens here
 }
 
-xowiki_applet ad_proc remove_user_from_community {
+xowiki_applet ad_proc -private remove_user_from_community {
   community_id
   user_id
 } {
@@ -158,7 +158,7 @@ xowiki_applet ad_proc remove_user_from_community {
   # nothing happens here
 }
 
-xowiki_applet ad_proc add_portlet {
+xowiki_applet ad_proc -private add_portlet {
   portal_id
 } {
   A helper proc to add the underlying portlet to the given portal.
@@ -170,7 +170,7 @@ xowiki_applet ad_proc add_portlet {
   # nothing happens here
 }
 
-xowiki_applet ad_proc add_portlet_helper {
+xowiki_applet ad_proc -private add_portlet_helper {
   portal_id
   args
 } {
@@ -183,7 +183,7 @@ xowiki_applet ad_proc add_portlet_helper {
        #        -param_action [ns_set get $args "param_action"]
 }
 
-xowiki_applet ad_proc remove_portlet {
+xowiki_applet ad_proc -private remove_portlet {
   portal_id
   args
 } {
@@ -197,7 +197,7 @@ xowiki_applet ad_proc remove_portlet {
 #             -package_id [ns_set get $args "package_id"]
 }
 
-xowiki_applet ad_proc clone {
+xowiki_applet ad_proc -private clone {
   old_community_id
   new_community_id
 } {
@@ -213,7 +213,7 @@ xowiki_applet ad_proc clone {
   #return $new_package_id
 }
 
-xowiki_applet ad_proc change_event_handler {
+xowiki_applet ad_proc -private change_event_handler {
   community_id
   event
   old_value
