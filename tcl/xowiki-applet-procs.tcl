@@ -229,7 +229,7 @@ xowiki_applet proc install {} {
   db_transaction {
 
     # register the applet implementation
-    ::xo::db::sql::acs_sc_impl new \
+    ::acs::dc call acs_sc_impl new \
         -impl_contract_name "dotlrn_applet" -impl_name $name \
         -impl_pretty_name "" -impl_owner_name $name
 
@@ -250,14 +250,14 @@ xowiki_applet proc install {} {
       Clone                     "xowiki_applet clone"
       ChangeEventHandler        "xowiki_applet change_event_handler"
     } {
-      ::xo::db::sql::acs_sc_impl_alias new \
+      ::acs::dc call acs_sc_impl_alias new \
           -impl_contract_name "dotlrn_applet" -impl_name $name  \
           -impl_operation_name $operation -impl_alias $call \
           -impl_pl "TCL"
     }
 
     # Add the binding
-    ::xo::db::sql::acs_sc_binding new \
+    ::acs::dc call acs_sc_binding new \
         -contract_name "dotlrn_applet" -impl_name $name
   }
 }
@@ -287,7 +287,7 @@ xowiki_applet proc uninstall {} {
       RemovePortlet
       Clone
     } {
-      ::xo::db::sql::acs_sc_impl_alias delete \
+      ::acs::dc call acs_sc_impl_alias delete \
           -impl_contract_name "dotlrn_applet" -impl_name $name \
           -impl_operation_name $operation
     }
@@ -295,13 +295,13 @@ xowiki_applet proc uninstall {} {
     #
     #  drop the binding
     #
-    ::xo::db::sql::acs_sc_binding delete \
+    ::acs::dc call acs_sc_binding delete \
         -contract_name "dotlrn_applet" -impl_name $name
 
     #
     #  drop the implementation
     #
-    ::xo::db::sql::acs_sc_impl delete \
+    ::acs::dc call acs_sc_impl delete \
         -impl_contract_name "dotlrn_applet" -impl_name $name
 
     xo::dc dml delete_applet "delete from dotlrn_applets where applet_key = :name"
