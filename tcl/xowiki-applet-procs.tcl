@@ -229,9 +229,9 @@ xowiki_applet proc install {} {
   db_transaction {
 
     # register the applet implementation
-    ::acs::dc call acs_sc_impl new \
-        -impl_contract_name "dotlrn_applet" -impl_name $name \
-        -impl_pretty_name "" -impl_owner_name $name
+    acs_sc::impl::new \
+        -contract_name "dotlrn_applet" -name $name \
+        -pretty_name "" -owner $name
 
     # add the operations
 
@@ -250,14 +250,14 @@ xowiki_applet proc install {} {
       Clone                     "xowiki_applet clone"
       ChangeEventHandler        "xowiki_applet change_event_handler"
     } {
-      ::acs::dc call acs_sc_impl_alias new \
-          -impl_contract_name "dotlrn_applet" -impl_name $name  \
-          -impl_operation_name $operation -impl_alias $call \
-          -impl_pl "TCL"
+      acs_sc::impl::alias::new \
+          -contract_name "dotlrn_applet" -impl_name $name \
+          -operation $operation -alias $call \
+          -language TCL
     }
 
     # Add the binding
-    ::acs::dc call acs_sc_binding new \
+    acs_sc::impl::binding::new \
         -contract_name "dotlrn_applet" -impl_name $name
   }
 }
@@ -271,38 +271,10 @@ xowiki_applet proc uninstall {} {
 
   db_transaction {
     #
-    #  drop the operation
-    #
-    foreach operation {
-      GetPrettyName
-      AddApplet
-      RemoveApplet
-      AddAppletToCommunity
-      RemoveAppletFromCommunity
-      AddUser
-      RemoveUser
-      AddUserToCommunity
-      RemoveUserFromCommunity
-      AddPortlet
-      RemovePortlet
-      Clone
-    } {
-      ::acs::dc call acs_sc_impl_alias delete \
-          -impl_contract_name "dotlrn_applet" -impl_name $name \
-          -impl_operation_name $operation
-    }
-
-    #
-    #  drop the binding
-    #
-    ::acs::dc call acs_sc_binding delete \
-        -contract_name "dotlrn_applet" -impl_name $name
-
-    #
     #  drop the implementation
     #
-    ::acs::dc call acs_sc_impl delete \
-        -impl_contract_name "dotlrn_applet" -impl_name $name
+    acs_sc::impl::delete \
+        -contract_name "dotlrn_applet" -impl_name $name
 
     xo::dc dml delete_applet "delete from dotlrn_applets where applet_key = :name"
 
