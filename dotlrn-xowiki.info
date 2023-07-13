@@ -12,13 +12,13 @@
         <owner url="http://www.km.co.at">Michael Totschnig</owner>
 	<summary>DotLRN Integration (Applet) for XoWiki</summary> 
         <vendor url="http://wu.ac.at">WU Vienna</vendor>
-        <release-date>2021-09-15</release-date>
+        <release-date>2022-02-25</release-date>
         <license>BSD-Style</license>
         <maturity>1</maturity>
 
         <provides url="dotlrn-xowiki" version="2.2d1"/>
-        <requires url="dotlrn" version="2.10.0"/>
-        <requires url="acs-tcl" version="5.10.1d11"/>        
+        <requires url="dotlrn" version="2.10.1b1"/>
+        <requires url="acs-tcl" version="5.10.1b1"/>        
         <requires url="xowiki-portlet" version="2.0"/>
 
         <callbacks>
