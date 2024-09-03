@@ -1,6 +1,6 @@
 ad_library {
   Procedures to supports xowiki as an dotlrn applet
-  
+
   @creation-date 2008-02-26
   @author Gustaf Neumann
   @cvs-id $Id$
@@ -9,9 +9,9 @@ ad_library {
 #
 # This is the first approach to make the applets
 #
-#  (a) in an oo-style (the object below contains everything 
+#  (a) in an oo-style (the object below contains everything
 #      for the management of the portlet) and
-#  (b) independent from the database layer 
+#  (b) independent from the database layer
 #      (supposed to work under postgres and Oracle)
 #
 # In the next steps, it would make sense to define a ::dotlrn::Applet
@@ -19,11 +19,17 @@ ad_library {
 #
 
 Object xowiki_applet
-xowiki_applet proc applet_key {} {
+xowiki_applet ad_proc applet_key {
+} {
+  @return package key
+} {
   return "dotlrn_xowiki"
 }
 
-xowiki_applet proc my_package_key {} {
+xowiki_applet ad_proc my_package_key {
+} {
+  @return package key
+} {
   return "dotlrn-xowiki"
 }
 
@@ -33,17 +39,17 @@ xowiki_applet ad_proc package_key {
 } {
   return "xowiki"
 }
-    
+
 xowiki_applet ad_proc node_name {
 } {
-  returns the node name
+  @return node name
 } {
   return "xowiki"
 }
 
 xowiki_applet ad_proc pretty_name {
 } {
-  returns the pretty name
+  @return pretty name
 } {
   return "XoWiki"
 }
@@ -53,17 +59,17 @@ xowiki_applet ad_proc add_applet {
   One time init - must be repeatable!
 } {
   dotlrn_applet::add_applet_to_dotlrn \
-      -applet_key [my applet_key] \
-      -package_key [my my_package_key]
+      -applet_key [:applet_key] \
+      -package_key [:my_package_key]
 }
 
 xowiki_applet ad_proc remove_applet {
 } {
-  One time destroy. 
+  One time destroy.
 } {
-  ad_return_complaint 1 "[my applet_key] remove_applet not implemented!"
+  ad_return_complaint 1 "[:applet_key] remove_applet not implemented!"
 }
-    
+
 xowiki_applet ad_proc add_applet_to_community {
   community_id
 } {
@@ -73,17 +79,17 @@ xowiki_applet ad_proc add_applet_to_community {
   set portal_id [dotlrn_community::get_portal_id -community_id $community_id]
 
   # get applet id
-  set applet_id [dotlrn_applet::get_applet_id_from_key -applet_key [my applet_key]]
-  
+  set applet_id [dotlrn_applet::get_applet_id_from_key -applet_key [:applet_key]]
+
   # create the package instance
-  set package_id [dotlrn::instantiate_and_mount $community_id [my package_key]]
+  set package_id [dotlrn::instantiate_and_mount $community_id [:package_key]]
 
   # set up the admin portlet
   set admin_portal_id [dotlrn_community::get_admin_portal_id -community_id $community_id]
   xowiki_admin_portlet add_self_to_page \
       -portal_id $admin_portal_id \
       -package_id $package_id
-  
+
   # set up the xowiki portlet for this community
   set portal_id [dotlrn_community::get_portal_id -community_id $community_id]
 
@@ -99,11 +105,11 @@ xowiki_applet ad_proc remove_applet_from_community {
   # get package id
   set package_id [dotlrn_community::get_applet_package_id \
                       -community_id $community_id \
-                      -applet_key [my applet_key]]
+                      -applet_key [:applet_key]]
 
-  set applet_id [dotlrn_applet::get_applet_id_from_key -applet_key [my applet_key]]
+  set applet_id [dotlrn_applet::get_applet_id_from_key -applet_key [:applet_key]]
   dotlrn::unmount_package -package_id $package_id
-  set url "[dotlrn_community::get_community_url $community_id][my node_name]/"
+  set url "[dotlrn_community::get_community_url $community_id][:node_name]/"
   # delete site node
   if { [site_node::exists_p -url $url] } {
     # get site node of mounted xowiki instance
@@ -113,7 +119,7 @@ xowiki_applet ad_proc remove_applet_from_community {
   }
 }
 
-xowiki_applet ad_proc add_user {
+xowiki_applet ad_proc -private add_user {
   user_id
 } {
   one time user-specific init
@@ -121,14 +127,20 @@ xowiki_applet ad_proc add_user {
   # noop
 }
 
-xowiki_applet ad_proc remove_user {
+xowiki_applet ad_proc -private remove_user {
   user_id
 } {
+  Remove user
 } {
-  ad_return_complaint 1 "[my applet_key] remove_user not implemented!"
+  # Just log the complaint instead of showing it to the user (script
+  # would keep going anyway, as it is not aborted). Needed for
+  # automated tests
+  ns_log warning "[:applet_key] remove_user not implemented!"
+  # ad_return_complaint 1 "[:applet_key] remove_user not implemented!"
+  return
 }
 
-xowiki_applet ad_proc add_user_to_community {
+xowiki_applet ad_proc -private add_user_to_community {
   community_id
   user_id
 } {
@@ -137,7 +149,7 @@ xowiki_applet ad_proc add_user_to_community {
   # nothing happens here
 }
 
-xowiki_applet ad_proc remove_user_from_community {
+xowiki_applet ad_proc -private remove_user_from_community {
   community_id
   user_id
 } {
@@ -145,12 +157,12 @@ xowiki_applet ad_proc remove_user_from_community {
 } {
   # nothing happens here
 }
-	
-xowiki_applet ad_proc add_portlet {
+
+xowiki_applet ad_proc -private add_portlet {
   portal_id
 } {
-  A helper proc to add the underlying portlet to the given portal. 
-  
+  A helper proc to add the underlying portlet to the given portal.
+
   @param portal_id
 } {
   # simple, no type specific stuff, just set some dummy values
@@ -158,7 +170,7 @@ xowiki_applet ad_proc add_portlet {
   # nothing happens here
 }
 
-xowiki_applet ad_proc add_portlet_helper {
+xowiki_applet ad_proc -private add_portlet_helper {
   portal_id
   args
 } {
@@ -166,65 +178,65 @@ xowiki_applet ad_proc add_portlet_helper {
   @param portal_id
 } {
   #xowiki_portlet add_self_to_page \
-       #	  -portal_id $portal_id \
-       #	  -package_id [ns_set get $args "package_id"] \
-       #	  -param_action [ns_set get $args "param_action"]
+       #        -portal_id $portal_id \
+       #        -package_id [ns_set get $args "package_id"] \
+       #        -param_action [ns_set get $args "param_action"]
 }
-    
-xowiki_applet ad_proc remove_portlet {
+
+xowiki_applet ad_proc -private remove_portlet {
   portal_id
   args
 } {
-  A helper proc to remove the underlying portlet from the given portal. 
-  
+  A helper proc to remove the underlying portlet from the given portal.
+
   @param portal_id
   @param args A list of key-value pairs (possibly user_id, community_id, and more)
-} { 
-#     	xowiki_portlet remove_self_from_page \
+} {
+#       xowiki_portlet remove_self_from_page \
 #             -portal_id $portal_id \
-#             -package_id [ns_set get $args "package_id"] 
+#             -package_id [ns_set get $args "package_id"]
 }
 
-xowiki_applet ad_proc clone {
+xowiki_applet ad_proc -private clone {
   old_community_id
   new_community_id
 } {
   Clone this applet's content from the old community to the new one
 } {
-  #ns_log notice "Cloning: [my applet_key]"
-  #set new_package_id [my add_applet_to_community $new_community_id]
+  #ns_log notice "Cloning: [:applet_key]"
+  #set new_package_id [:add_applet_to_community $new_community_id]
   #set old_package_id [dotlrn_community::get_applet_package_id \
   #                        -community_id $old_community_id \
-  #                        -applet_key [my applet_key] \
+  #                        -applet_key [:applet_key] \
   #                   ]
   #db_exec_plsql clone_data {}
   #return $new_package_id
 }
 
-xowiki_applet ad_proc change_event_handler {
+xowiki_applet ad_proc -private change_event_handler {
   community_id
   event
   old_value
   new_value
-} { 
-  listens for the following events: 
-} { 
+} {
+  listens for the following events:
+} {
   #; nothing
-}   
+}
 
 xowiki_applet proc install {} {
-  set name [my applet_key]
+  set name [:applet_key]
   db_transaction {
-    
+
     # register the applet implementation
-    ::xo::db::sql::acs_sc_impl new \
-        -impl_contract_name "dotlrn_applet" -impl_name $name \
-        -impl_pretty_name "" -impl_owner_name $name
+    acs_sc::impl::new \
+        -contract_name "dotlrn_applet" -name $name \
+        -pretty_name "" -owner $name
 
     # add the operations
 
     foreach {operation call} {
-      GetPrettyName 	        "xowiki_applet pretty_name"
+      GetPrettyName             "xowiki_applet pretty_name"
       AddApplet                 "xowiki_applet add_applet"
       RemoveApplet              "xowiki_applet remove_applet"
       AddAppletToCommunity      "xowiki_applet add_applet_to_community"
@@ -238,64 +250,36 @@ xowiki_applet proc install {} {
       Clone                     "xowiki_applet clone"
       ChangeEventHandler        "xowiki_applet change_event_handler"
     } {
-      ::xo::db::sql::acs_sc_impl_alias new \
-          -impl_contract_name "dotlrn_applet" -impl_name $name  \
-          -impl_operation_name $operation -impl_alias $call \
-          -impl_pl "TCL"
+      acs_sc::impl::alias::new \
+          -contract_name "dotlrn_applet" -impl_name $name \
+          -operation $operation -alias $call \
+          -language TCL
     }
 
     # Add the binding
-    ::xo::db::sql::acs_sc_binding new \
+    acs_sc::impl::binding::new \
         -contract_name "dotlrn_applet" -impl_name $name
   }
 }
 
 xowiki_applet proc uninstall {} {
-  my log "--applet calling [self proc]"
+  :log "--applet calling [self proc]"
   #
   # pretty similar "xowiki_portlet uninstall"
   #
-  set name [my applet_key]
+  set name [:applet_key]
 
   db_transaction {
     #
-    #  drop the operation
-    #
-    foreach operation {
-      GetPrettyName
-      AddApplet
-      RemoveApplet
-      AddAppletToCommunity
-      RemoveAppletFromCommunity
-      AddUser
-      RemoveUser
-      AddUserToCommunity
-      RemoveUserFromCommunity
-      AddPortlet
-      RemovePortlet
-      Clone
-    } {
-      ::xo::db::sql::acs_sc_impl_alias delete \
-          -impl_contract_name "dotlrn_applet" -impl_name $name \
-          -impl_operation_name $operation
-    }
-
-    #
-    #  drop the binding
-    #
-    ::xo::db::sql::acs_sc_binding delete \
-        -contract_name "dotlrn_applet" -impl_name $name
-
-    #
     #  drop the implementation
     #
-    ::xo::db::sql::acs_sc_impl delete \
-        -impl_contract_name "dotlrn_applet" -impl_name $name 
+    acs_sc::impl::delete \
+        -contract_name "dotlrn_applet" -impl_name $name
 
     xo::dc dml delete_applet "delete from dotlrn_applets where applet_key = :name"
 
   }
-  my log "--applet end of [self proc]"
+  :log "--applet end of [self proc]"
 }
 
 ::xowiki_applet proc after-install {} {
@@ -306,3 +290,8 @@ xowiki_applet proc uninstall {} {
   ::xowiki_applet uninstall
 }
 
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 2
+#    indent-tabs-mode: nil
+# End:
